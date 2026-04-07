@@ -7,38 +7,38 @@ fn main() {
 
     for &s in &sizes {
         for &p in &percent_sorted {
-            let avg_ns = sort_test_n_avg(n_times, s, p, false, merge::merge_sort);
+            let avg_ns = sort_test(n_times, s, p, false, merge::merge_sort);
             println!(
                 "merge_sort | size: {} | sorted: {:.3} | avg time: {:.0} us",
                 s, p, avg_ns
             );
 
-            let avg_ns = sort_test_n_avg(n_times, s, p, false, quick::quick_sort);
+            let avg_ns = sort_test(n_times, s, p, false, quick::quick_sort);
             println!(
                 "quick_sort | size: {} | sorted: {:.3} | avg time: {:.0} us",
                 s, p, avg_ns
             );
 
-            let avg_ns = sort_test_n_avg(n_times, s, p, false, intro::intro_sort);
+            let avg_ns = sort_test(n_times, s, p, false, intro::intro_sort);
             println!(
                 "intro_sort | size: {} | sorted: {:.3} | avg time: {:.0} us",
                 s, p, avg_ns
             );
         }
 
-        let avg_ns = sort_test_n_avg(n_times, s, 0.0, true, merge::merge_sort);
+        let avg_ns = sort_test(n_times, s, 0.0, true, merge::merge_sort);
         println!(
             "merge_sort | size: {} | reversed | avg time: {:.0} us",
             s, avg_ns
         );
 
-        let avg_ns = sort_test_n_avg(n_times, s, 0.0, true, quick::quick_sort);
+        let avg_ns = sort_test(n_times, s, 0.0, true, quick::quick_sort);
         println!(
             "quick_sort | size: {} | reversed | avg time: {:.0} us",
             s, avg_ns
         );
 
-        let avg_ns = sort_test_n_avg(n_times, s, 0.0, true, intro::intro_sort);
+        let avg_ns = sort_test(n_times, s, 0.0, true, intro::intro_sort);
         println!(
             "intro_sort | size: {} | reversed | avg time: {:.0} us",
             s, avg_ns

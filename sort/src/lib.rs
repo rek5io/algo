@@ -1,49 +1,36 @@
 use rand::prelude::*;
 
-pub fn sort_test_n_avg<F>(
-    n_times: usize,
-    size: usize,
-    percent_sorted: f64,
-    rev: bool,
-    sort_fn: F,
-) -> f64
+pub fn sort_test<F>(n_times: usize, size: usize, percent_sorted: f64, rev: bool, sort_fn: F) -> f64
 where
     F: Fn(&mut [i32]),
 {
-    let res: Vec<std::time::Duration> = (0..n_times)
-        .map(|_| sort_test(size, percent_sorted, rev, &sort_fn))
-        .collect();
-    res.iter().map(|d| d.as_nanos() as f64).sum::<f64>() / (res.len() as f64 * 1000.0)
-}
-
-pub fn sort_test(
-    size: usize,
-    percent_sorted: f64,
-    rev_sorted: bool,
-    sort_fn: impl Fn(&mut [i32]),
-) -> std::time::Duration {
     let mut rng = rand::rng();
     let mut set: Vec<i32> = (0..size).map(|_| rng.random()).collect();
     let mut set_org = set.clone();
+    set_org.sort();
 
     if percent_sorted > 0.0 {
         let len = set.len();
         (&mut set[..(len as f64 * percent_sorted) as usize]).sort();
     }
 
-    if rev_sorted {
+    if rev {
         set.sort();
         set.reverse();
     }
 
-    let t_start = std::time::Instant::now();
-    sort_fn(&mut set);
-    let t_end = std::time::Instant::now();
+    let res: Vec<_> = (0..n_times)
+        .map(|_| {
+            let mut set = set.clone();
+            let t_start = std::time::Instant::now();
+            sort_fn(&mut set);
+            let t_end = std::time::Instant::now();
+            assert!(set_org == set);
+            t_end - t_start
+        })
+        .collect();
 
-    set_org.sort();
-    assert!(set_org == set);
-
-    t_end - t_start
+    res.iter().map(|d| d.as_nanos() as f64).sum::<f64>() / (res.len() as f64 * 1000.0)
 }
 
 mod util {
