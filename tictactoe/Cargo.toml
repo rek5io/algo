@@ -3,5 +3,11 @@ name = "tictactoe"
 version = "0.1.0"
 edition = "2024"
 
-[dependencies]
-iced = { version = "*", features = [ "advanced" ] }
+[dependencies."iced"]
+version = "0.14"
+
+[dependencies."rayon"]
+version = "1.12"
+
+[profile."release"]
+panic = "abort"
